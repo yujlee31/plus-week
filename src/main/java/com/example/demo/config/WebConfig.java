@@ -15,13 +15,14 @@ import org.springframework.core.Ordered;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@Configuration
-@RequiredArgsConstructor
+@Configuration //설정파일
+@RequiredArgsConstructor //의존성 주입
 public class WebConfig implements WebMvcConfigurer {
 
     // TODO: 2. 인가에 대한 이해
-    private static final String[] AUTH_REQUIRED_PATH_PATTERNS = {"/users/logout", "/admins/*", "/items/*"};
-    private static final String[] ADMIN_REQUIRED_PATH_PATTERNS = {"/admins/*"};
+    //filter와 interceptor의 path에서 * 차이  
+    private static final String[] AUTH_REQUIRED_PATH_PATTERNS = {"/users/logout", "/admins/**", "/items/**"};
+    private static final String[] ADMIN_REQUIRED_PATH_PATTERNS = {"/admins/**"};
     private static final String[] USER_ROLE_REQUIRED_PATH_PATTERNS = {"/reservations/*"};
 
     private final AuthInterceptor authInterceptor;
@@ -43,21 +44,22 @@ public class WebConfig implements WebMvcConfigurer {
                 .order(Ordered.HIGHEST_PRECEDENCE + 2);
     }
 
-    @Bean
-    public FilterRegistrationBean authFilter() {
-        FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
-        filterRegistrationBean.setFilter(new AuthFilter());
-        filterRegistrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
-        filterRegistrationBean.addUrlPatterns(AUTH_REQUIRED_PATH_PATTERNS);
-        return filterRegistrationBean;
-    }
-
-    @Bean
-    public FilterRegistrationBean userRoleFilter() {
-        FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
-        filterRegistrationBean.setFilter(new RoleFilter(Role.USER));
-        filterRegistrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE + 2);
-        filterRegistrationBean.addUrlPatterns(USER_ROLE_REQUIRED_PATH_PATTERNS);
-        return filterRegistrationBean;
-    }
+//    필터에 대한 부분 주석처리    
+//    @Bean
+//    public FilterRegistrationBean authFilter() {
+//        FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
+//        filterRegistrationBean.setFilter(new AuthFilter());
+//        filterRegistrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+//        filterRegistrationBean.addUrlPatterns(AUTH_REQUIRED_PATH_PATTERNS);
+//        return filterRegistrationBean;
+//    }
+//
+//    @Bean
+//    public FilterRegistrationBean userRoleFilter() {
+//        FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
+//        filterRegistrationBean.setFilter(new RoleFilter(Role.USER));
+//        filterRegistrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE + 2);
+//        filterRegistrationBean.addUrlPatterns(USER_ROLE_REQUIRED_PATH_PATTERNS);
+//        return filterRegistrationBean;
+//    }
 }

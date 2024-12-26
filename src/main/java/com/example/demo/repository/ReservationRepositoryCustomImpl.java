@@ -12,8 +12,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-@RequiredArgsConstructor
-public class ReservationRepositoryCustomImpl implements ReservationRepositoryCustom {
+@RequiredArgsConstructor //의존성주입
+public class ReservationRepositoryCustomImpl implements ReservationRepositoryCustom { //QueryDSL
 
     private final JPAQueryFactory queryFactory;
 
@@ -25,8 +25,8 @@ public class ReservationRepositoryCustomImpl implements ReservationRepositoryCus
 
         return queryFactory
                 .selectFrom(reservation)
-                .join(reservation.user, user).fetchJoin()
-                .join(reservation.item, item).fetchJoin()
+                .join(reservation.user, user).fetchJoin() //N+1문제 해결
+                .join(reservation.item, item).fetchJoin() //N+1문제 해결
                 .where(
                         eqUserId(userId),
                         eqItemId(itemId)
@@ -35,10 +35,10 @@ public class ReservationRepositoryCustomImpl implements ReservationRepositoryCus
     }
 
     private BooleanExpression eqUserId(Long userId) {
-        return userId != null ? QReservation.reservation.user.id.eq(userId) : null;
+        return userId != null ? QReservation.reservation.user.id.eq(userId) : null; //null여부에 따라 동적으로 검색 수행
     }
 
     private BooleanExpression eqItemId(Long itemId) {
-        return itemId != null ? QReservation.reservation.item.id.eq(itemId) : null;
+        return itemId != null ? QReservation.reservation.item.id.eq(itemId) : null; //null여부에 따라 동적으로 검색 수행
     }
 }

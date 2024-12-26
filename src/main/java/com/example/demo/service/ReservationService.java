@@ -37,6 +37,7 @@ public class ReservationService {
 
     // TODO: 1. 트랜잭션 이해
     @Transactional
+    //메서드가 정상적으로 종료되면 commit, 예외가 발생하면 rollback하여 일부 작업만 db에 반영되는것을 방지해 db 일관성 유지
     public ReservationResponseDto createReservation(Long itemId, Long userId, LocalDateTime startAt, LocalDateTime endAt) {
         // 쉽게 데이터를 생성하려면 아래 유효성검사 주석 처리
         List<Reservation> haveReservations = reservationRepository.findConflictingReservations(itemId, startAt, endAt);
@@ -64,6 +65,8 @@ public class ReservationService {
 
     // TODO: 3. N+1 문제
     public List<ReservationResponseDto> getReservations() {
+
+        //User, Item 각각 조회 -> fetchJoin 이용하여 쿼리 양 감소
         List<Reservation> reservations = reservationRepository.findAllWithUserAndItem();
 
         return reservations.stream().map(reservation ->

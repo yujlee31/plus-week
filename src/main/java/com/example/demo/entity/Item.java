@@ -8,7 +8,7 @@ import org.hibernate.annotations.DynamicInsert;
 
 @Entity
 @Getter
-@DynamicInsert
+@DynamicInsert //default값이 정해져있으면 파라미터값이 null일 때 hibernate가 insert문에서 해당 파라미터를 생략
 // TODO: 6. Dynamic Insert
 public class Item {
     @Id
