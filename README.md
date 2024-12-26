@@ -1,1 +1,2 @@
-플러스 주차 개인과제 기반 코드입니다.
+과제 풀이 흔적:
+https://yujinly.tistory.com/9
